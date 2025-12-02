@@ -205,14 +205,22 @@
             </p>
           </div>
 
-          <!-- Map Placeholder -->
+          <!-- Map -->
           <div style="margin-top: 2rem;">
-            <div style="width: 100%; height: 250px; background-color: var(--color-background-alt); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; border: 2px solid var(--color-border);">
-              <div style="text-align: center; color: var(--color-text-secondary);">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🗺️</div>
-                <p>Google Maps would be embedded here</p>
-                <a href="https://maps.google.com" target="_blank" rel="noopener" style="color: var(--color-primary-main); font-size: 0.875rem;">Get Directions →</a>
-              </div>
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3356.139426679474!2d-117.16519892346943!3d32.73515897366896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80d954b7e8a1b535%3A0x3b5e3f3e3f3e3f3e!2sMaple%20St%2C%20San%20Diego%2C%20CA%2092103!5e0!3m2!1sen!2sus!4v1733167890123!5m2!1sen!2sus" 
+              width="100%" 
+              height="300" 
+              style="border: 0; border-radius: var(--radius-md); box-shadow: var(--shadow-sm);" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Modern Medical Clinic Location - San Diego">
+            </iframe>
+            <div style="margin-top: 1rem; text-align: center;">
+              <a href="https://www.google.com/maps/dir//Maple+St,+San+Diego,+CA+92103" target="_blank" rel="noopener" style="color: var(--color-primary-main); font-weight: 600; text-decoration: none; font-size: 0.9375rem;">
+                🗺️ Get Directions →
+              </a>
             </div>
           </div>
 

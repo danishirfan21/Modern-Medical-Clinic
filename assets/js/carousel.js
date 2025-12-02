@@ -24,9 +24,12 @@ class DoctorsCarousel {
   init() {
     this.createNavigationDots();
     this.addEventListeners();
-    this.startAutoScroll();
+    // Ensure we start at index 0
+    this.track.scrollLeft = 0;
+    this.currentIndex = 0;
     this.updateActiveDot();
     this.updateButtonStates();
+    this.startAutoScroll();
   }
 
   createNavigationDots() {
@@ -151,7 +154,7 @@ class DoctorsCarousel {
     let closestDistance = Infinity;
 
     this.cards.forEach((card, index) => {
-      const cardCenter = card.offsetLeft - this.track.offsetLeft + card.clientWidth / 2;
+      const cardCenter = card.offsetLeft + card.clientWidth / 2;
       const distance = Math.abs(trackCenter - cardCenter);
 
       if (distance < closestDistance) {

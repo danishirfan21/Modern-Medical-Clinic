@@ -34,37 +34,91 @@
     </div>
   </header>
 
-  <section class="doctor-profile">
+  <!-- Doctor Profile Hero -->
+  <section class="doctor-hero">
+    <div class="doctor-hero__gradient"></div>
     <div class="container">
-
-      <!-- Doctor Header -->
-      <div class="doctor-profile__header fade-in">
-        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&h=800&fit=crop"
-             alt="Dr. Sarah Martinez"
-             class="doctor-profile__image">
-        <div>
-          <h1>Dr. Sarah Martinez, MD</h1>
-          <p style="color: var(--color-primary-main); font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">
-            Family Medicine
-          </p>
-
-          <div class="doctor-profile__credentials">
-            <span class="credential-badge">Board Certified</span>
-            <span class="credential-badge">15 Years Experience</span>
-            <span class="credential-badge">Accepting New Patients</span>
-            <span class="credential-badge">English, Spanish</span>
+      <div class="doctor-hero__content fade-in">
+        <div class="doctor-hero__image-wrapper">
+          <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&h=800&fit=crop"
+               alt="Dr. Sarah Martinez"
+               class="doctor-hero__image">
+          <div class="doctor-hero__status-badge">
+            <span class="status-indicator"></span>
+            Accepting Patients
           </div>
-
-          <p style="margin: 1.5rem 0; font-size: 1.125rem; line-height: 1.6;">
-            Compassionate family medicine specialist dedicated to providing comprehensive, patient-centered care for all ages.
+        </div>
+        
+        <div class="doctor-hero__info">
+          <h1 class="doctor-hero__name">Dr. Sarah Martinez, MD</h1>
+          <p class="doctor-hero__specialty">Board-Certified Family Medicine Physician</p>
+          
+          <div class="doctor-hero__badges">
+            <span class="trust-badge">
+              <span class="trust-badge__icon">✓</span>
+              <span class="trust-badge__text">Board Certified</span>
+            </span>
+            <span class="trust-badge">
+              <span class="trust-badge__icon">🎓</span>
+              <span class="trust-badge__text">15+ Years</span>
+            </span>
+            <span class="trust-badge">
+              <span class="trust-badge__icon">💬</span>
+              <span class="trust-badge__text">English, Spanish</span>
+            </span>
+            <span class="trust-badge trust-badge--rating">
+              <span class="trust-badge__icon">⭐</span>
+              <span class="trust-badge__text">4.9 Rating</span>
+            </span>
+          </div>
+          
+          <p class="doctor-hero__bio">
+            Compassionate family medicine specialist dedicated to providing comprehensive, patient-centered care for all ages. Known for taking time to listen and creating personalized treatment plans.
           </p>
-
-          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-            <a href="#" class="btn btn--primary btn--large" data-modal="booking">Book with Dr. Martinez</a>
-            <a href="tel:5551234567" class="btn btn--secondary btn--large">Call (555) 123-4567</a>
+          
+          <div class="doctor-hero__ctas">
+            <a href="#" class="btn btn--primary btn--large" data-modal="booking">
+              📅 Book Appointment
+            </a>
+            <a href="tel:5551234567" class="btn btn--secondary btn--large">
+              📞 Call (555) 123-4567
+            </a>
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Quick Info Cards -->
+  <section class="doctor-quick-info">
+    <div class="container">
+      <div class="doctor-info-grid fade-in">
+        <div class="info-card">
+          <div class="info-card__icon">🎓</div>
+          <h3 class="info-card__title">Education</h3>
+          <p class="info-card__text">Stanford Medical School<br>UCLA Residency</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card__icon">🏥</div>
+          <h3 class="info-card__title">Experience</h3>
+          <p class="info-card__text">15+ Years<br>5,000+ Patients Treated</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card__icon">💼</div>
+          <h3 class="info-card__title">Specialties</h3>
+          <p class="info-card__text">Family Care, Women's Health<br>Chronic Disease Management</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card__icon">🌍</div>
+          <h3 class="info-card__title">Languages</h3>
+          <p class="info-card__text">English (Native)<br>Spanish (Fluent)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="doctor-profile">
+    <div class="container">
 
       <!-- Tabs Navigation -->
       <div class="doctor-profile__tabs fade-in" style="margin-top: 3rem;">

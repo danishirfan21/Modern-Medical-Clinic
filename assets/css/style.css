@@ -309,7 +309,7 @@ a:hover {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-lg);
 }
 
 .hero__trust-badge {

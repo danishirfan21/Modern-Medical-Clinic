@@ -9,6 +9,8 @@ class DoctorsCarousel {
     this.track = this.carousel.querySelector('.doctors-carousel__track');
     this.cards = this.carousel.querySelectorAll('.doctor-card');
     this.navContainer = this.carousel.querySelector('.carousel-nav');
+    this.prevButton = this.carousel.querySelector('.carousel-button--prev');
+    this.nextButton = this.carousel.querySelector('.carousel-button--next');
 
     if (!this.track || this.cards.length === 0) return;
 
@@ -24,6 +26,7 @@ class DoctorsCarousel {
     this.addEventListeners();
     this.startAutoScroll();
     this.updateActiveDot();
+    this.updateButtonStates();
   }
 
   createNavigationDots() {
@@ -46,6 +49,21 @@ class DoctorsCarousel {
   }
 
   addEventListeners() {
+    // Navigation buttons
+    if (this.prevButton) {
+      this.prevButton.addEventListener('click', () => {
+        this.previousSlide();
+        this.stopAutoScroll();
+      });
+    }
+
+    if (this.nextButton) {
+      this.nextButton.addEventListener('click', () => {
+        this.nextSlide();
+        this.stopAutoScroll();
+      });
+    }
+
     // Navigation dots click
     if (this.navContainer) {
       this.navContainer.addEventListener('click', (e) => {
@@ -104,6 +122,7 @@ class DoctorsCarousel {
     });
 
     this.updateActiveDot();
+    this.updateButtonStates();
   }
 
   nextSlide() {
@@ -114,6 +133,15 @@ class DoctorsCarousel {
   previousSlide() {
     const prevIndex = (this.currentIndex - 1 + this.cards.length) % this.cards.length;
     this.goToSlide(prevIndex);
+  }
+
+  updateButtonStates() {
+    if (!this.prevButton || !this.nextButton) return;
+
+    // Optionally disable buttons at start/end (or keep them cycling)
+    // For continuous carousel, we don't disable
+    this.prevButton.disabled = false;
+    this.nextButton.disabled = false;
   }
 
   updateActiveSlideOnScroll() {
@@ -135,6 +163,7 @@ class DoctorsCarousel {
     if (closestIndex !== this.currentIndex) {
       this.currentIndex = closestIndex;
       this.updateActiveDot();
+      this.updateButtonStates();
     }
   }
 

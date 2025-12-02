@@ -66,75 +66,159 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================
-// FADE-IN ANIMATIONS ON SCROLL
+// IMPROVED FADE-IN ANIMATIONS ON SCROLL
 // ============================================
 
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: '0px 0px -50px 0px'
-};
+class ImprovedFadeInObserver {
+  constructor() {
+    this.observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
+    this.observer = new IntersectionObserver(
+      (entries) => this.handleIntersection(entries),
+      this.observerOptions
+    );
+
+    this.init();
+  }
+
+  init() {
+    const elements = document.querySelectorAll('.fade-in');
+    
+    // Observe elements in batches to improve performance
+    elements.forEach((el, index) => {
+      setTimeout(() => {
+        this.observer.observe(el);
+      }, index * 10);
+    });
+  }
+
+  handleIntersection(entries) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        this.observer.unobserve(entry.target);
+      }
+    });
+  }
+}
+
+// Initialize improved fade-in observer
+const fadeInObserver = new ImprovedFadeInObserver();
+
+// ============================================
+// IMPROVED BOOKING MODAL (iOS COMPATIBLE)
+// ============================================
+
+class ModalManager {
+  constructor() {
+    this.scrollPosition = 0;
+    this.modal = document.getElementById('bookingModal');
+    this.openButtons = document.querySelectorAll('[data-modal="booking"]');
+    this.closeButton = document.querySelector('.modal__close');
+    
+    if (!this.modal) return;
+    
+    this.init();
+  }
+
+  init() {
+    // Open modal handlers
+    this.openButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.openModal();
+      });
+      
+      // Keyboard accessibility
+      button.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.openModal();
+        }
+      });
+    });
+
+    // Close modal handlers
+    if (this.closeButton) {
+      this.closeButton.addEventListener('click', () => this.closeModal());
     }
-  });
-}, observerOptions);
 
-// Observe all elements with fade-in class
-document.querySelectorAll('.fade-in').forEach(el => {
-  observer.observe(el);
-});
+    // Close on backdrop click (only backdrop, not content)
+    this.modal.addEventListener('click', (e) => {
+      if (e.target === this.modal) {
+        this.closeModal();
+      }
+    });
 
-// ============================================
-// BOOKING MODAL
-// ============================================
+    // Close on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.modal.classList.contains('active')) {
+        this.closeModal();
+      }
+    });
+  }
 
-const bookingModal = document.getElementById('bookingModal');
-const openModalButtons = document.querySelectorAll('[data-modal="booking"]');
-const closeModalButton = document.querySelector('.modal__close');
-
-// Open modal
-openModalButtons.forEach(button => {
-  button.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (bookingModal) {
-      bookingModal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-
-      // Focus first input
-      const firstInput = bookingModal.querySelector('input, select, textarea');
+  openModal() {
+    // Save current scroll position
+    this.scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Lock scroll (iOS compatible)
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${this.scrollPosition}px`;
+    document.body.style.width = '100%';
+    document.body.classList.add('modal-open');
+    
+    // Show modal
+    this.modal.classList.add('active');
+    
+    // Focus first input
+    setTimeout(() => {
+      const firstInput = this.modal.querySelector('input, select, textarea');
       if (firstInput) {
-        setTimeout(() => firstInput.focus(), 100);
+        firstInput.focus();
+      }
+    }, 100);
+
+    // Hide mobile CTA bar
+    const mobileCta = document.querySelector('.mobile-cta-bar');
+    if (mobileCta) {
+      mobileCta.style.display = 'none';
+    }
+  }
+
+  closeModal() {
+    // Hide modal
+    this.modal.classList.remove('active');
+    
+    // Unlock scroll
+    document.body.classList.remove('modal-open');
+    const scrollY = document.body.style.top;
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    
+    // Restore scroll position
+    window.scrollTo(0, parseInt(scrollY || '0') * -1);
+
+    // Show mobile CTA bar if it should be visible
+    const mobileCta = document.querySelector('.mobile-cta-bar');
+    if (mobileCta) {
+      mobileCta.style.display = '';
+      // Trigger mobile CTA check
+      if (window.mobileCtaBarInstance) {
+        window.mobileCtaBarInstance.handleScroll();
       }
     }
-  });
-});
+  }
+}
 
-// Close modal
-if (closeModalButton && bookingModal) {
-  closeModalButton.addEventListener('click', () => {
-    bookingModal.classList.remove('active');
-    document.body.style.overflow = '';
-  });
-
-  // Close on backdrop click
-  bookingModal.addEventListener('click', (e) => {
-    if (e.target === bookingModal) {
-      bookingModal.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-  });
-
-  // Close on ESC key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && bookingModal.classList.contains('active')) {
-      bookingModal.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-  });
+// Initialize modal manager
+let modalManager;
+if (document.getElementById('bookingModal')) {
+  modalManager = new ModalManager();
 }
 
 // ============================================
@@ -220,88 +304,107 @@ tabButtons.forEach(button => {
 });
 
 // ============================================
-// FORM VALIDATION
+// IMPROVED FORM VALIDATION
 // ============================================
 
-const forms = document.querySelectorAll('form');
+class ImprovedFormValidation {
+  constructor() {
+    this.forms = document.querySelectorAll('form');
+    this.init();
+  }
 
-forms.forEach(form => {
-  const inputs = form.querySelectorAll('input, select, textarea');
+  init() {
+    this.forms.forEach(form => {
+      const inputs = form.querySelectorAll('input, select, textarea');
 
-  inputs.forEach(input => {
-    // Add validation on blur
-    input.addEventListener('blur', () => {
-      validateField(input);
+      inputs.forEach(input => {
+        // Validate on blur
+        input.addEventListener('blur', () => {
+          this.validateField(input);
+        });
+
+        // Clear error on input
+        input.addEventListener('input', () => {
+          this.clearError(input);
+        });
+      });
     });
+  }
 
-    // Remove error on input
-    input.addEventListener('input', () => {
-      if (input.classList.contains('error')) {
-        input.classList.remove('error');
-        const errorMessage = input.parentElement.querySelector('.error-message');
-        if (errorMessage) {
-          errorMessage.remove();
-        }
+  validateField(field) {
+    const value = field.value.trim();
+    let isValid = true;
+    let errorMessage = '';
+
+    // Required field check
+    if (field.hasAttribute('required') && !value) {
+      isValid = false;
+      errorMessage = 'This field is required';
+    }
+
+    // Email validation
+    if (field.type === 'email' && value) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        isValid = false;
+        errorMessage = 'Please enter a valid email (e.g., name@example.com)';
       }
-    });
-  });
-});
-
-function validateField(field) {
-  const value = field.value.trim();
-  let isValid = true;
-  let errorMessage = '';
-
-  // Required field check
-  if (field.hasAttribute('required') && !value) {
-    isValid = false;
-    errorMessage = 'This field is required';
-  }
-
-  // Email validation
-  if (field.type === 'email' && value) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(value)) {
-      isValid = false;
-      errorMessage = 'Please enter a valid email (e.g., name@example.com)';
     }
-  }
 
-  // Phone validation (basic)
-  if (field.type === 'tel' && value) {
-    const phoneRegex = /^[\d\s\-\+\(\)]+$/;
-    if (!phoneRegex.test(value) || value.length < 10) {
-      isValid = false;
-      errorMessage = 'Please enter a valid phone number';
+    // Phone validation
+    if (field.type === 'tel' && value) {
+      const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+      if (!phoneRegex.test(value) || value.replace(/\D/g, '').length < 10) {
+        isValid = false;
+        errorMessage = 'Please enter a valid phone number';
+      }
     }
+
+    if (!isValid) {
+      this.showError(field, errorMessage);
+    } else {
+      this.clearError(field);
+    }
+
+    return isValid;
   }
 
-  // Display error or remove it
-  if (!isValid) {
+  showError(field, message) {
     field.classList.add('error');
     field.style.borderColor = 'var(--color-error)';
+    field.setAttribute('aria-invalid', 'true');
 
-    // Add error message if not exists
-    if (!field.parentElement.querySelector('.error-message')) {
-      const errorDiv = document.createElement('div');
-      errorDiv.className = 'error-message';
-      errorDiv.style.color = 'var(--color-error)';
-      errorDiv.style.fontSize = 'var(--font-size-small)';
-      errorDiv.style.marginTop = 'var(--space-xs)';
-      errorDiv.textContent = errorMessage;
-      field.parentElement.appendChild(errorDiv);
+    // Remove existing error message
+    const existingError = field.parentElement.querySelector('.error-message');
+    if (existingError) {
+      existingError.remove();
     }
-  } else {
+
+    // Add new error message
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.style.color = 'var(--color-error)';
+    errorDiv.style.fontSize = 'var(--font-size-small)';
+    errorDiv.style.marginTop = 'var(--space-xs)';
+    errorDiv.setAttribute('role', 'alert');
+    errorDiv.textContent = message;
+    field.parentElement.appendChild(errorDiv);
+  }
+
+  clearError(field) {
     field.classList.remove('error');
     field.style.borderColor = '';
+    field.removeAttribute('aria-invalid');
+
     const errorDiv = field.parentElement.querySelector('.error-message');
     if (errorDiv) {
       errorDiv.remove();
     }
   }
-
-  return isValid;
 }
+
+// Initialize improved form validation
+const formValidation = new ImprovedFormValidation();
 
 // ============================================
 // INITIALIZE ON DOM LOADED
@@ -317,12 +420,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Add active class to current nav item
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav__link').forEach(link => {
-    if (link.getAttribute('href') === currentPage) {
-      link.style.color = 'var(--color-primary-main)';
-    }
-  });
+  setActiveNavLink();
+  
+  // Add skip link for accessibility
+  addSkipLink();
 });
 
 // ============================================
@@ -347,3 +448,90 @@ if ('IntersectionObserver' in window) {
     imageObserver.observe(img);
   });
 }
+
+// ============================================
+// NAV ACTIVE STATE MANAGEMENT
+// ============================================
+
+function setActiveNavLink() {
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  
+  document.querySelectorAll('.nav__link').forEach(link => {
+    const linkHref = link.getAttribute('href');
+    
+    if (linkHref === currentPage) {
+      link.classList.add('nav__link--active');
+      link.setAttribute('aria-current', 'page');
+    } else {
+      link.classList.remove('nav__link--active');
+      link.removeAttribute('aria-current');
+    }
+  });
+}
+
+// ============================================
+// SKIP LINK FUNCTIONALITY
+// ============================================
+
+function addSkipLink() {
+  // Check if skip link already exists
+  if (document.querySelector('.skip-link')) return;
+
+  const skipLink = document.createElement('a');
+  skipLink.href = '#main-content';
+  skipLink.className = 'skip-link';
+  skipLink.textContent = 'Skip to main content';
+
+  // Insert at beginning of body
+  document.body.insertBefore(skipLink, document.body.firstChild);
+
+  // Find or create main content wrapper
+  let mainContent = document.getElementById('main-content');
+  if (!mainContent) {
+    // Wrap first section after header in main
+    const header = document.querySelector('header');
+    const firstSection = header ? header.nextElementSibling : document.body.firstChild;
+    
+    if (firstSection && firstSection.tagName !== 'FOOTER') {
+      firstSection.id = 'main-content';
+      firstSection.setAttribute('tabindex', '-1');
+    }
+  }
+}
+
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+
+// Debounce function for performance
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+// Throttle function for scroll events
+function throttle(func, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
+// Export utilities for use in other scripts
+window.utilityFunctions = {
+  debounce,
+  throttle
+};
+
+console.log('✅ Modern Medical Clinic - JavaScript loaded successfully');

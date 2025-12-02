@@ -1,6 +1,6 @@
 /**
- * Modern Medical Clinic - Sticky Mobile CTA Bar
- * Shows/hides based on scroll position
+ * Modern Medical Clinic - Improved Sticky Mobile CTA Bar
+ * Shows/hides based on scroll position with performance optimizations
  */
 
 class MobileCtaBar {
@@ -8,12 +8,14 @@ class MobileCtaBar {
     this.ctaBar = document.querySelector('.mobile-cta-bar');
     this.hero = document.querySelector('.hero, .hero--variant-b');
     this.footer = document.querySelector('.footer');
+    this.modal = document.querySelector('.modal');
 
     if (!this.ctaBar) return;
 
     this.heroHeight = this.hero ? this.hero.offsetHeight : window.innerHeight;
     this.lastScroll = 0;
     this.isVisible = false;
+    this.ticking = false;
 
     this.init();
   }
@@ -22,8 +24,16 @@ class MobileCtaBar {
     // Check scroll position on load
     this.handleScroll();
 
-    // Listen to scroll events
-    window.addEventListener('scroll', () => this.handleScroll());
+    // Throttled scroll listener for performance using requestAnimationFrame
+    window.addEventListener('scroll', () => {
+      if (!this.ticking) {
+        window.requestAnimationFrame(() => {
+          this.handleScroll();
+          this.ticking = false;
+        });
+        this.ticking = true;
+      }
+    });
 
     // Recalculate on resize
     window.addEventListener('resize', () => {
@@ -33,16 +43,14 @@ class MobileCtaBar {
 
   handleScroll() {
     const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-
-    // Check if footer is in viewport
     const footerInView = this.isFooterInView();
+    const modalOpen = this.modal && this.modal.classList.contains('active');
 
     // Show CTA bar if:
-    // 1. Scrolled past hero (more than 100vh)
-    // 2. Scrolling down or already past threshold
-    // 3. Footer is not in view
-
-    if (currentScroll > this.heroHeight && !footerInView) {
+    // 1. Scrolled past hero
+    // 2. Footer is not in view
+    // 3. Modal is not open
+    if (currentScroll > this.heroHeight && !footerInView && !modalOpen) {
       this.show();
     } else {
       this.hide();
@@ -76,9 +84,9 @@ class MobileCtaBar {
   }
 }
 
-// Initialize on DOM load
+// Initialize on DOM load and store globally for modal access
 document.addEventListener('DOMContentLoaded', () => {
-  new MobileCtaBar();
+  window.mobileCtaBarInstance = new MobileCtaBar();
 });
 
 // Handle click-to-call functionality

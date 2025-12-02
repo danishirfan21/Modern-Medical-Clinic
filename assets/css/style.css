@@ -150,7 +150,6 @@ a:hover {
   background-color: transparent;
   color: var(--color-primary-dark);
   border: 2px solid var(--color-primary-dark);
-  padding: 14px 30px;
 }
 
 .btn--secondary:hover {
@@ -241,6 +240,8 @@ a:hover {
   font-size: 1.5rem;
   cursor: pointer;
   color: var(--color-primary-dark);
+  padding: var(--space-xs);
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* ============================================
@@ -370,9 +371,9 @@ a:hover {
 /* Hero AB Toggle Button */
 .hero__ab-toggle {
   position: absolute;
-  top: var(--space-md);
-  right: var(--space-md);
-  background-color: rgba(255, 255, 255, 0.9);
+  top: var(--space-sm);
+  right: var(--space-sm);
+  background-color: rgba(255, 255, 255, 0.95);
   color: var(--color-primary-dark);
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-md);
@@ -382,6 +383,7 @@ a:hover {
   border: 2px solid var(--color-primary-dark);
   transition: all var(--transition-fast);
   z-index: 10;
+  box-shadow: var(--shadow-sm);
 }
 
 .hero__ab-toggle:hover {
@@ -477,12 +479,12 @@ a:hover {
   width: 100%;
   height: 4px;
   background: linear-gradient(90deg, var(--color-primary-dark), var(--color-primary-main));
-  transform: scaleX(0);
-  transition: transform var(--transition-base);
+  opacity: 0;
+  transition: opacity var(--transition-base);
 }
 
 .service-card:hover::before {
-  transform: scaleX(1);
+  opacity: 1;
 }
 
 .service-card:hover {
@@ -620,6 +622,11 @@ a:hover {
   transition: all var(--transition-fast);
 }
 
+.carousel-nav__dot:hover {
+  background-color: var(--color-primary-main);
+  transform: scale(1.1);
+}
+
 .carousel-nav__dot--active {
   background-color: var(--color-primary-dark);
   width: 32px;
@@ -744,6 +751,9 @@ a:hover {
   filter: grayscale(100%);
   transition: all var(--transition-base);
   border: 1px solid var(--color-border);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small);
 }
 
 .insurance__logo:hover {
@@ -821,7 +831,7 @@ a:hover {
 .form__select:focus,
 .form__textarea:focus {
   outline: none;
-  border: 2px solid var(--color-primary-main);
+  border-color: var(--color-primary-main);
   box-shadow: 0 0 0 3px rgba(74, 158, 191, 0.1);
 }
 
@@ -1009,7 +1019,8 @@ a:hover {
 .footer__legal-links {
   display: flex;
   justify-content: center;
-  gap: var(--space-md);
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-md);
   margin-top: var(--space-xs);
 }
 
@@ -1035,7 +1046,7 @@ a:hover {
   display: grid;
   grid-template-columns: 1fr 1fr;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
-  z-index: var(--z-mobile-cta);
+  z-index: var(--z-sticky);
   transform: translateY(100%);
   transition: transform var(--transition-base);
 }
@@ -1093,6 +1104,7 @@ a:hover {
   align-items: center;
   justify-content: center;
   padding: var(--space-md);
+  overflow-y: auto;
 }
 
 .modal.active {
@@ -1314,6 +1326,14 @@ a:hover {
     display: block;
   }
 
+  /* Hero A/B Toggle on Mobile */
+  .hero__ab-toggle {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    top: var(--space-xs);
+    right: var(--space-xs);
+  }
+
   /* Hero */
   .hero__ctas {
     flex-direction: column;
@@ -1348,12 +1368,12 @@ a:hover {
     grid-template-columns: 1fr;
   }
 
-  .testimonial__image-wrapper {
-    order: 1 !important;
+  .testimonial:nth-child(even) .testimonial__image-wrapper {
+    order: 1;
   }
 
-  .testimonial__content {
-    order: 2 !important;
+  .testimonial:nth-child(even) .testimonial__content {
+    order: 2;
   }
 
   /* Insurance */
@@ -1418,6 +1438,14 @@ a:hover {
 }
 
 *:focus-visible {
+  outline: 3px solid var(--color-primary-main);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Ensure buttons and links have proper focus states */
+button:focus-visible,
+a:focus-visible {
   outline: 3px solid var(--color-primary-main);
   outline-offset: 2px;
 }

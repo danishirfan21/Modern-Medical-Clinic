@@ -1300,22 +1300,26 @@ a:hover {
 
 .service-detail__content h2 {
   text-align: center;
+  font-size: var(--font-size-h2);
 }
 
 .service-detail__content p {
   text-align: center;
+  font-size: 1.125rem;
+  line-height: var(--line-height-relaxed);
 }
 
 .service-detail__content h3 {
   margin-bottom: var(--space-md);
   text-align: center;
+  font-size: var(--font-size-h4);
 }
 
 .service-detail__list {
   list-style: none;
-  margin: var(--space-md) 0;
+  margin: var(--space-md) auto;
   text-align: left;
-  width: 100%;
+  width: fit-content;
   max-width: 600px;
 }
 
@@ -1323,6 +1327,8 @@ a:hover {
   padding-left: var(--space-md);
   position: relative;
   margin-bottom: var(--space-xs);
+  font-size: 1.0625rem;
+  line-height: var(--line-height-relaxed);
 }
 
 .service-detail__list-item::before {
@@ -1335,6 +1341,165 @@ a:hover {
 
 .service-detail__content .btn {
   margin-top: var(--space-md);
+}
+
+/* Service Offerings Icon Grid */
+.service-offerings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+  margin: var(--space-lg) 0;
+  width: 100%;
+  max-width: 800px;
+}
+
+.service-offering-card {
+  background: var(--color-background-alt);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  text-align: center;
+  transition: all var(--transition-fast);
+  cursor: default;
+  border: 2px solid transparent;
+}
+
+.service-offering-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary-light);
+}
+
+.service-offering-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-sm);
+}
+
+.service-offering-text {
+  font-size: 0.9375rem;
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* Quick FAQs Section */
+.service-quick-faqs {
+  width: 100%;
+  max-width: 700px;
+  margin: var(--space-xl) auto;
+  padding: var(--space-lg);
+  background: var(--color-background-alt);
+  border-radius: var(--radius-lg);
+}
+
+.service-quick-faqs h4 {
+  font-size: var(--font-size-h5);
+  color: var(--color-primary-dark);
+  margin-bottom: var(--space-md);
+  text-align: center;
+}
+
+.faq-accordion {
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-sm);
+  border: 1px solid var(--color-border);
+}
+
+.faq-accordion summary {
+  padding: var(--space-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary-dark);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-accordion summary::after {
+  content: '+';
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-main);
+  transition: transform var(--transition-fast);
+}
+
+.faq-accordion[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.faq-accordion p {
+  padding: 0 var(--space-md) var(--space-md);
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  text-align: left;
+}
+
+/* Service CTA Wrapper */
+.service-cta-wrapper {
+  margin-top: var(--space-xl);
+  text-align: center;
+}
+
+.service-cta-text {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+  font-style: italic;
+}
+
+/* Meet Your Team Section */
+.service-team-section {
+  margin-top: var(--space-xxl);
+  padding: var(--space-xl);
+  background: var(--color-background-alt);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.service-team-title {
+  font-size: var(--font-size-h3);
+  color: var(--color-primary-dark);
+  margin-bottom: var(--space-lg);
+}
+
+.service-team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.service-team-member {
+  text-align: center;
+}
+
+.service-team-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto var(--space-sm);
+  border: 4px solid var(--color-background);
+  box-shadow: var(--shadow-md);
+}
+
+.service-team-name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+  font-size: 1.0625rem;
+}
+
+.service-team-specialty {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small);
+  margin: 0;
 }
 
 /* Doctor Profile Page */
@@ -1507,6 +1672,22 @@ a:hover {
     grid-template-columns: 1fr;
   }
 
+  /* Service Offerings Grid - Mobile */
+  .service-offerings-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+
+  /* Service Team Grid - Mobile */
+  .service-team-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .service-team-section {
+    padding: var(--space-md);
+  }
+
   /* Footer */
   .footer__container {
     grid-template-columns: 1fr;
@@ -1523,6 +1704,16 @@ a:hover {
     position: static;
     margin-top: var(--space-lg);
     margin-left: 0;
+  }
+
+  /* Service Offerings Grid - Tablet */
+  .service-offerings-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Service Team Grid - Tablet */
+  .service-team-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
   
   .testimonial {

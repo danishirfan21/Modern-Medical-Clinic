@@ -1443,13 +1443,6 @@ a:hover {
   border-radius: 2px;
 }
 
-/* Ensure buttons and links have proper focus states */
-button:focus-visible,
-a:focus-visible {
-  outline: 3px solid var(--color-primary-main);
-  outline-offset: 2px;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

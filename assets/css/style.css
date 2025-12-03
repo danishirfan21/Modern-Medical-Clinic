@@ -1821,7 +1821,7 @@ a:hover {
   position: absolute;
   left: 0;
   top: 2rem;
-  bottom: 2rem;
+  bottom: 4rem;
   width: 4px;
   background-color: var(--color-primary-dark);
 }
@@ -1834,11 +1834,12 @@ a:hover {
 
 .timeline-item:last-child {
   margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .timeline-badge {
   position: absolute;
-  left: -6rem;
+  left: -7.5rem;
   top: 0;
   width: 4rem;
   height: 4rem;

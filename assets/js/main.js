@@ -454,12 +454,27 @@ if ('IntersectionObserver' in window) {
 // ============================================
 
 function setActiveNavLink() {
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  // Get the current page filename
+  const pathname = window.location.pathname;
+  const currentPage = pathname.split('/').pop() || 'index.html';
+  
+  // If pathname is just '/' or empty, we're on index
+  const isHomePage = pathname === '/' || pathname === '' || currentPage === '' || currentPage === 'index.html';
   
   document.querySelectorAll('.nav__link').forEach(link => {
     const linkHref = link.getAttribute('href');
+    const linkPage = linkHref.split('/').pop();
     
-    if (linkHref === currentPage) {
+    // Check if this link matches the current page
+    let isActive = false;
+    
+    if (isHomePage && (linkPage === 'index.html' || linkHref === '/' || linkHref === '')) {
+      isActive = true;
+    } else if (linkPage === currentPage) {
+      isActive = true;
+    }
+    
+    if (isActive) {
       link.classList.add('nav__link--active');
       link.setAttribute('aria-current', 'page');
     } else {
